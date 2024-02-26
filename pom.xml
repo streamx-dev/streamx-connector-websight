@@ -31,7 +31,30 @@
     <sling.mocks.version>3.3.0</sling.mocks.version>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>artifact-registry</id>
+      <url>
+        artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-public-releases
+      </url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
   <build>
+    <extensions>
+      <extension>
+        <groupId>com.google.cloud.artifactregistry</groupId>
+        <artifactId>artifactregistry-maven-wagon</artifactId>
+        <version>2.2.1</version>
+      </extension>
+    </extensions>
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -91,7 +114,7 @@
 
     <dependency>
       <groupId>dev.streamx</groupId>
-      <artifactId>sling-streamx-connector</artifactId>
+      <artifactId>streamx-connector-sling</artifactId>
       <version>${streamx.connector.sling.version}</version>
       <scope>provided</scope>
     </dependency>
