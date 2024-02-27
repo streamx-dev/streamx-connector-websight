@@ -28,4 +28,4 @@ jobs:
           cache: 'maven'
       - uses: actions/cache@v3
       - name: Build and test with Maven
-        run: mvn --batch-mode clean verify -P e2e
+        run: mvn clean verify
