@@ -13,7 +13,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component
 public class ResourceResolverProviderImpl implements ResourceResolverProvider {
 
-  private static final String SERVICE_USER_ID = "streamx-connector-websight-blueprint";
+  private static final String SERVICE_USER_ID = "streamx-connector-websight-blueprints";
 
   @Reference
   private ResourceResolverFactory resourceResolverFactory;

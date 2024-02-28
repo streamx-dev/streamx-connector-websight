@@ -1,7 +1,7 @@
 package dev.streamx.connector.websight.blueprint.handler.application;
 
 import dev.streamx.connector.websight.blueprint.ResourceResolverProvider;
-import dev.streamx.connector.websight.blueprint.reference.relay.model.WebResourceModel;
+import dev.streamx.connector.websight.blueprint.model.WebResourceModel;
 import dev.streamx.sling.connector.PublicationHandler;
 import dev.streamx.sling.connector.PublishData;
 import dev.streamx.sling.connector.UnpublishData;
@@ -28,6 +28,7 @@ public class ApplicationResourceDataHandler implements PublicationHandler<WebRes
   private static final Logger LOG = LoggerFactory.getLogger(ApplicationResourceDataHandler.class);
 
   private String publicationChannel;
+  private boolean enabled;
 
   @Reference
   private ResourceResolverProvider resourceResolverProvider;
@@ -36,6 +37,7 @@ public class ApplicationResourceDataHandler implements PublicationHandler<WebRes
   @Modified
   private void activate(ApplicationResourceDataConfig config) {
     publicationChannel = config.publication_channel();
+    enabled = config.enabled();
   }
 
   @Override
@@ -45,6 +47,10 @@ public class ApplicationResourceDataHandler implements PublicationHandler<WebRes
 
   @Override
   public boolean canHandle(String resourcePath) {
+    if (!enabled) {
+      return false;
+    }
+
     try (ResourceResolver resourceResolver = resourceResolverProvider.getResourceResolver()) {
       return Arrays.stream(resourceResolver.getSearchPath()).anyMatch(resourcePath::startsWith);
     } catch (LoginException e) {

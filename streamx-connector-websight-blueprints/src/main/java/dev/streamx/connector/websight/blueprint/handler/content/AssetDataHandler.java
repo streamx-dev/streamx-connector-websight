@@ -1,7 +1,7 @@
 package dev.streamx.connector.websight.blueprint.handler.content;
 
 import dev.streamx.connector.websight.blueprint.ResourceResolverProvider;
-import dev.streamx.connector.websight.blueprint.reference.relay.model.AssetModel;
+import dev.streamx.connector.websight.blueprint.model.AssetModel;
 import dev.streamx.sling.connector.PublicationHandler;
 import dev.streamx.sling.connector.PublishData;
 import dev.streamx.sling.connector.UnpublishData;
@@ -32,15 +32,17 @@ public class AssetDataHandler implements PublicationHandler<AssetModel> {
   private static final Logger LOG = LoggerFactory.getLogger(AssetDataHandler.class);
   private static final String ASSETS_PATH_REGEXP = "^/published/[^/]+/assets/.*$";
 
-  private String publicationChannel;
-
   @Reference
   private ResourceResolverProvider resourceResolverProvider;
+
+  private String publicationChannel;
+  private boolean enabled;
 
   @Activate
   @Modified
   private void activate(AssetDataHandlerConfig config) {
     publicationChannel = config.publication_channel();
+    enabled = config.enabled();
   }
 
   @Override
@@ -50,7 +52,7 @@ public class AssetDataHandler implements PublicationHandler<AssetModel> {
 
   @Override
   public boolean canHandle(String resourcePath) {
-    return resourcePath.matches(ASSETS_PATH_REGEXP);
+    return enabled && resourcePath.matches(ASSETS_PATH_REGEXP);
   }
 
   @Override
@@ -88,16 +90,12 @@ public class AssetDataHandler implements PublicationHandler<AssetModel> {
   }
 
   private AssetModel resolveData(Resource publishedResource) throws PublishException {
-    try {
-      return getPublicationData(publishedResource);
+    try (InputStream dataStream = getStorageData(publishedResource)) {
+      return new AssetModel(ByteBuffer.wrap(dataStream.readAllBytes()));
     } catch (IOException e) {
       throw new PublishException(
           String.format("Cannot read resource %s data", publishedResource.getPath()), e);
     }
-  }
-
-  private AssetModel getPublicationData(Resource resource) throws IOException {
-    return new AssetModel(ByteBuffer.wrap(getStorageData(resource).readAllBytes()));
   }
 
   private InputStream getStorageData(Resource resource) {

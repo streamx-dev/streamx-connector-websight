@@ -12,7 +12,7 @@
 
   <modules>
     <module>streamx-connector-websight</module>
-    <module>streamx-connector-websight-blueprint</module>
+    <module>streamx-connector-websight-blueprints</module>
   </modules>
 
   <build>

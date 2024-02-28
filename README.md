@@ -11,9 +11,9 @@ This project deliver modules:
 This bundle provides components responsible for publishing application and content resources to StreamX.
 
 
-### streamx-connector-websight-blueprint
+### streamx-connector-websight-blueprints
 
-This bundle provides handlers responsible for delivering publication data of published resources.
+This bundle provides publication handlers for the StreamX Blueprints.
 
 ## Build
 
@@ -31,7 +31,7 @@ mvn clean install -P autoInstallBundle
 
 ## Usage
 
-Using the connector in the project requires adding proper bundles and the `streamx-connector-websight-blueprint` service user.
+Using the connector in the project requires adding proper bundles and the `streamx-connector-websight-blueprints` service user.
 
 Example:
 
@@ -99,14 +99,14 @@ Example:
       "start-order": "25"
     },
     {
-      "id": "dev.streamx:streamx-connector-websight-blueprint:${streamx.connector.websight.version}",
+      "id": "dev.streamx:streamx-connector-websight-blueprints:${streamx.connector.websight.version}",
       "start-order": "25"
     }
   ],
   "configurations": {
-    "org.apache.sling.serviceusermapping.impl.ServiceUserMapperImpl.amended~streamx-connector-websight-blueprint": {
+    "org.apache.sling.serviceusermapping.impl.ServiceUserMapperImpl.amended~streamx-connector-websight-blueprints": {
       "user.mapping": [
-        "streamx-connector-websight-blueprint=[streamx-connector-websight-blueprint]"
+        "streamx-connector-websight-blueprints=[streamx-connector-websight-blueprints]"
       ]
     },
     "dev.streamx.sling.connector.impl.StreamxPublicationServiceImpl": {
@@ -115,18 +115,6 @@ Example:
     "dev.streamx.sling.connector.impl.StreamxClientFactoryImpl": {
       "streamxUrl": "$[env:STREAMX_PUBLICATION_SERVER_URL]",
       "authToken": "$[env:STREAMX_PUBLICATION_AUTH_TOKEN]"
-    },
-    "dev.streamx.connector.websight.blueprint.handler.content.PageDataHandler": {
-      "nofollow.external.links": false,
-      "shorten.content.paths": false,
-      "pages.publication.channel": "pages",
-      "templates.publication.channel": "templates"
-    },
-    "dev.streamx.connector.websight.blueprint.handler.content.AssetDataHandler": {
-      "publication.channel": "assets"
-    },
-    "dev.streamx.connector.websight.blueprint.handler.application.ApplicationResourceDataHandler": {
-      "publication.channel": "web-resources"
     }
   },
   "repoinit:TEXT|true": "@file"
@@ -137,9 +125,9 @@ Example:
 Repo init with service user setup:
 
 ```
-create service user streamx-connector-websight-blueprint with path system/websight
+create service user streamx-connector-websight-blueprints with path system/websight
 
-set ACL for streamx-connector-websight-blueprint
+set ACL for streamx-connector-websight-blueprints
     allow   jcr:read    on /content,/published
 end
 ```

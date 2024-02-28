@@ -1,4 +1,4 @@
-package dev.streamx.connector.websight.blueprint.handler.content;
+package dev.streamx.connector.websight.blueprint.impl;
 
 import java.io.FilterInputStream;
 import java.io.IOException;

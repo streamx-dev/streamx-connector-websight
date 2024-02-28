@@ -1,9 +1,7 @@
-package dev.streamx.connector.websight.blueprint.reference.relay.model;
+package dev.streamx.connector.websight.blueprint.model;
 
 import java.nio.ByteBuffer;
-import org.apache.avro.specific.AvroGenerated;
 
-@AvroGenerated
 public class WebResourceModel {
   private ByteBuffer content;
 

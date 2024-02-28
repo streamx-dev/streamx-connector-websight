@@ -1,22 +1,15 @@
-package dev.streamx.connector.websight.blueprint.handler.content;
+package dev.streamx.connector.websight.blueprint.impl;
 
-import dev.streamx.connector.websight.blueprint.ResourceResolverProvider;
-import dev.streamx.connector.websight.blueprint.reference.relay.model.PageModel;
-import dev.streamx.sling.connector.PublicationHandler;
-import dev.streamx.sling.connector.PublishData;
-import dev.streamx.sling.connector.UnpublishData;
+import dev.streamx.connector.websight.blueprint.PageDataService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.engine.SlingRequestProcessor;
 import org.apache.sling.servlethelpers.internalrequests.SlingInternalRequest;
 import org.jsoup.Jsoup;
@@ -30,101 +23,33 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.ds.websight.publishing.framework.PublishException;
 
 @Component
-@Designate(ocd = PageDataHandlerConfig.class)
-public class PageDataHandler implements PublicationHandler<PageModel> {
+@Designate(ocd = PageDataServiceConfig.class)
+public class PageDataServiceImpl implements PageDataService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PageDataHandler.class);
-  private static final String PAGES_PATH_REGEXP = "^/published/[^/]+/pages/.*$";
+  private static final Logger LOG = LoggerFactory.getLogger(PageDataServiceImpl.class);
 
   @Reference
   private SlingRequestProcessor requestProcessor;
 
-  @Reference
-  private ResourceResolverProvider resourceResolverProvider;
-
   private boolean shortenContentPaths;
   private boolean nofollowExternalLinks;
   private HashSet<String> nofollowDisallowedHosts;
-  private String pagesPublicationChannel;
-  private String templatesPublicationChannel;
   private String templatesPathPattern;
 
   @Activate
   @Modified
-  private void activate(PageDataHandlerConfig config) {
+  private void activate(PageDataServiceConfig config) {
     shortenContentPaths = config.shorten_content_paths();
     nofollowExternalLinks = config.nofollow_external_links();
     nofollowDisallowedHosts = new HashSet<>(
         List.of(config.nofollow_external_links_disallowed_hosts()));
-    pagesPublicationChannel = config.pages_publication_channel();
-    templatesPublicationChannel = config.templates_publication_channel();
     templatesPathPattern = config.templates_pattern();
   }
 
-  @Override
-  public String getId() {
-    return "WebSight-Pages-Handler";
-  }
 
   @Override
-  public boolean canHandle(String resourcePath) {
-    return resourcePath.matches(PAGES_PATH_REGEXP);
-  }
-
-  @Override
-  public PublishData<PageModel> getPublishData(String resourcePath) {
-    try (ResourceResolver resourceResolver = resourceResolverProvider.getResourceResolver()) {
-      Resource resource = resourceResolver.getResource(resourcePath);
-      if (resource != null) {
-        PageModel page = resolveData(resource);
-        return new PublishData<>(getStoragePath(resourcePath),
-            getPublicationChannel(resource.getPath()), PageModel.class, page);
-      } else {
-        LOG.info("Cannot prepare publish data for {}. Resource doesn't exist.", resourcePath);
-      }
-    } catch (PublishException e) {
-      LOG.error("Cannot prepare publish data for {}.", resourcePath, e);
-    } catch (LoginException e) {
-      LOG.error("Cannot get resource resolver.");
-    }
-    return null;
-  }
-
-  @Override
-  public UnpublishData<PageModel> getUnpublishData(String resourcePath) {
-    return new UnpublishData<>(getStoragePath(resourcePath), getPublicationChannel(resourcePath),
-        PageModel.class);
-  }
-
-  private PageModel resolveData(Resource resource) throws PublishException {
-    try {
-      return getPublicationData(resource);
-    } catch (IOException e) {
-      LOG.warn("IOException occurred when storing data for resource {}", resource.getPath());
-      throw new PublishException(String.format("Cannot read resource %s data", resource.getPath()),
-          e);
-    }
-  }
-
-  private String getStoragePath(String resourcePath) {
-    return resourcePath + ".html";
-  }
-
-  private String getPublicationChannel(String resourcePath) {
-    if (resourcePath.matches(templatesPathPattern)) {
-      return templatesPublicationChannel;
-    }
-    return pagesPublicationChannel;
-  }
-
-  private PageModel getPublicationData(Resource resource) throws IOException {
-    return new PageModel(ByteBuffer.wrap(getStorageData(resource).readAllBytes()));
-  }
-
-
   public InputStream getStorageData(Resource resource) throws IOException {
     String response = new SlingInternalRequest(resource.getResourceResolver(), requestProcessor,
         resource.getPath()).withExtension("html").execute().getResponseAsString();
@@ -133,6 +58,16 @@ public class PageDataHandler implements PublicationHandler<PageModel> {
 
     return wrapStreamIfNeeded(shortenContentPaths, resource.getPath(),
         new ByteArrayInputStream(response.getBytes()));
+  }
+
+  @Override
+  public boolean isPage(String resourcePath) {
+    return !isPageTemplate(resourcePath);
+  }
+
+  @Override
+  public boolean isPageTemplate(String resourcePath) {
+    return resourcePath.matches(templatesPathPattern);
   }
 
   private boolean isNofollowAllowedForHost(String href) {

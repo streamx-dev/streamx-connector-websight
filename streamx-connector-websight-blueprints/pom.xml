@@ -12,10 +12,10 @@
   </parent>
 
   <groupId>dev.streamx</groupId>
-  <artifactId>streamx-connector-websight-blueprint</artifactId>
-  <name>StreamX Connector - WebSight Blueprint</name>
+  <artifactId>streamx-connector-websight-blueprints</artifactId>
+  <name>StreamX Connector - WebSight Blueprints</name>
   <version>0.0.1-SNAPSHOT</version>
-  <description>Contains implementation of handlers for the StreamX WebSight connector.</description>
+  <description>Contains implementation of publication handlers for the StreamX Blueprints.</description>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>

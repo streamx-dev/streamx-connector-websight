@@ -1,16 +1,14 @@
-package dev.streamx.connector.websight.blueprint.reference.relay.model;
+package dev.streamx.connector.websight.blueprint.model;
 
 import java.nio.ByteBuffer;
-import org.apache.avro.specific.AvroGenerated;
 
-@AvroGenerated
-public class AssetModel {
+public class TemplateModel {
   private ByteBuffer content;
 
-  public AssetModel() {
+  public TemplateModel() {
   }
 
-  public AssetModel(ByteBuffer content) {
+  public TemplateModel(ByteBuffer content) {
     this.content = content;
   }
 
