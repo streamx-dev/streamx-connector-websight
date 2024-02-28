@@ -9,6 +9,13 @@ This project deliver modules:
 ### streamx-connector-websight
 
 This bundle provides components responsible for publishing application and content resources to StreamX.
+Each handler contains the configuration allows to change publication channel and disable it.
+See:
+
+- [ApplicationResourceDataConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/application/ApplicationResourceDataConfig.java)
+- [AssetDataHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/AssetDataHandlerConfig.java)
+- [PageDataHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/PageDataHandlerConfig.java)
+- [TemplateDataHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/TemplateDataHandlerConfig.java)
 
 
 ### streamx-connector-websight-blueprints
@@ -31,7 +38,10 @@ mvn clean install -P autoInstallBundle
 
 ## Usage
 
-Using the connector in the project requires adding proper bundles and the `streamx-connector-websight-blueprints` service user.
+Using the connector in the project requires adding proper bundles. 
+
+Notice that using `dev.streamx:streamx-connector-websight-blueprints:${streamx.connector.websight.version}` 
+requires the `streamx-connector-websight-blueprints` service user, and it's optional while integrating with StreamX Blueprints.
 
 Example:
 
@@ -51,18 +61,6 @@ Example:
       "start-order": "25"
     },
     {
-      "id":"com.fasterxml.jackson.core:jackson-annotations:2.13.3",
-      "start-order":"20"
-    },
-    {
-      "id":"com.fasterxml.jackson.core:jackson-core:2.13.3",
-      "start-order":"20"
-    },
-    {
-      "id": "com.fasterxml.jackson.core:jackson-databind:2.13.3",
-      "start-order": "20"
-    },
-    {
       "id":"com.fasterxml.jackson.core:jackson-annotations:2.15.3",
       "start-order":"20"
     },
@@ -73,10 +71,6 @@ Example:
     {
       "id": "com.fasterxml.jackson.core:jackson-databind:2.15.3",
       "start-order": "20"
-    },
-    {
-      "id":"org.apache.commons:commons-lang3:3.12.0",
-      "start-order":"25"
     },
     {
       "id":"org.apache.commons:commons-lang3:3.14.0",
@@ -136,7 +130,11 @@ Note: make sure you added `<filesInclude>*.json</filesInclude>` after base featu
 Your repo init entry will be added to resulting repo init script according to the order
 of `<aggregate>` items. If you add `<filesInclude>*.json</filesInclude>` at the beginning
 service user will be getting created before `/content` and `/published` resources will be crated
-which will result with error. Example `slingfeature-maven-plugin` config:
+which will result with error. 
+
+You may need to use also `<artifactsOverride>*:*:HIGHEST</artifactsOverride>` to use the highest defined versions of duplicated artifacts.
+
+Example `slingfeature-maven-plugin` config:
 
 ```xml
 <plugin>
@@ -149,6 +147,9 @@ which will result with error. Example `slingfeature-maven-plugin` config:
       <aggregate>
         <classifier>my-classifier</classifier>
         <title>My project</title>
+        <artifactsOverrides>
+          <artifactsOverride>*:*:HIGHEST</artifactsOverride>
+        </artifactsOverrides>
         <includeArtifact>
           <groupId>pl.ds.websight</groupId>
           <artifactId>websight-cms-ce-feature</artifactId>
