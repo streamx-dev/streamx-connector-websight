@@ -33,6 +33,13 @@
 
   <repositories>
     <repository>
+      <id>websight-repo</id>
+      <url>https://repo.websight.io/maven/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
       <id>artifact-registry</id>
       <url>
         artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-public-releases

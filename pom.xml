@@ -4,13 +4,6 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <artifactId>websight-parent-reactor</artifactId>
-    <groupId>pl.ds.websight</groupId>
-    <version>19</version>
-    <relativePath />
-  </parent>
-
   <groupId>dev.streamx</groupId>
   <artifactId>streamx-connector-websight-reactor</artifactId>
   <version>0.0.1-SNAPSHOT</version>
@@ -28,13 +21,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
         <version>3.0.0</version>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
         <configuration>
           <skip>true</skip>
         </configuration>
