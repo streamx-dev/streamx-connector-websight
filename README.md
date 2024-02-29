@@ -9,6 +9,12 @@ This project deliver modules:
 ### streamx-connector-websight
 
 This bundle provides components responsible for publishing application and content resources to StreamX.
+
+
+### streamx-connector-websight-blueprints
+
+This bundle provides publication handlers for the StreamX Blueprints.
+
 Each handler contains the configuration allows to change publication channel and disable it.
 See:
 
@@ -16,11 +22,6 @@ See:
 - [AssetDataHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/AssetDataHandlerConfig.java)
 - [PageDataHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/PageDataHandlerConfig.java)
 - [TemplateDataHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/TemplateDataHandlerConfig.java)
-
-
-### streamx-connector-websight-blueprints
-
-This bundle provides publication handlers for the StreamX Blueprints.
 
 ## Build
 
