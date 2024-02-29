@@ -20,7 +20,7 @@
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <streamx.connector.sling.version>0.0.1</streamx.connector.sling.version>
+    <streamx.connector.sling.version>0.0.3</streamx.connector.sling.version>
     <!-- plugins -->
     <bnd.version>6.2.0</bnd.version>
     <sling.models.bnd.version>1.0.0</sling.models.bnd.version>
@@ -47,17 +47,6 @@
       </snapshots>
     </repository>
     <repository>
-      <id>streamx-maven-releases</id>
-      <url>artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-releases
-      </url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
       <id>streamx-maven-public-releases</id>
       <url>
         artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-public-releases
@@ -73,8 +62,9 @@
 
   <distributionManagement>
     <repository>
-      <id>streamx-maven-releases</id>
-      <url>artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-releases
+      <id>streamx-maven-public-releases</id>
+      <url>
+        artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-public-releases
       </url>
     </repository>
     <snapshotRepository>
@@ -159,14 +149,6 @@
     </pluginManagement>
 
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>3.0.0</version>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
