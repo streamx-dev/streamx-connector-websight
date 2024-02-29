@@ -27,8 +27,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-          cache: 'maven'
 
-      - uses: actions/cache@v3
       - name: Build and test with Maven
         run: ./mvnw clean verify

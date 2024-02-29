@@ -5,97 +5,32 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>pl.ds.websight</groupId>
-    <artifactId>websight-bundle-parent</artifactId>
-    <version>19</version>
-    <relativePath />
+    <groupId>dev.streamx</groupId>
+    <artifactId>streamx-connector-websight-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>dev.streamx</groupId>
   <artifactId>streamx-connector-websight-blueprints</artifactId>
   <name>StreamX Connector - WebSight Blueprints</name>
-  <version>0.0.1-SNAPSHOT</version>
   <description>Contains implementation of publication handlers for the StreamX Blueprints.</description>
 
-  <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    <streamx.connector.sling.version>0.0.1</streamx.connector.sling.version>
-    <!-- plugins -->
-    <bnd.version>6.2.0</bnd.version>
-
-    <!-- testing -->
-    <jupiter.version>5.9.0</jupiter.version>
-    <sling.mocks.version>3.3.0</sling.mocks.version>
-  </properties>
-
-  <repositories>
-    <repository>
-      <id>websight-repo</id>
-      <url>https://repo.websight.io/maven/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>streamx-maven-snapshots</id>
-      <url>artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-snapshots
-      </url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>streamx-maven-releases</id>
-      <url>artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-releases
-      </url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>streamx-maven-public-releases</id>
-      <url>
-        artifactregistry://europe-west1-maven.pkg.dev/streamx-releases/streamx-maven-public-releases
-      </url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
 
   <build>
-    <extensions>
-      <extension>
-        <groupId>com.google.cloud.artifactregistry</groupId>
-        <artifactId>artifactregistry-maven-wagon</artifactId>
-        <version>2.2.1</version>
-      </extension>
-    </extensions>
-
     <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>biz.aQute.bnd</groupId>
         <artifactId>bnd-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>bnd-process</id>
-            <goals>
-              <goal>bnd-process</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>biz.aQute.bnd</groupId>
@@ -114,114 +49,70 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
   <dependencies>
     <dependency>
+      <groupId>dev.streamx</groupId>
+      <artifactId>streamx-connector-sling</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>pl.ds.websight</groupId>
       <artifactId>websight-publishing-framework-next</artifactId>
-      <version>3.0.2</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>pl.ds.websight</groupId>
       <artifactId>websight-pages-core-api</artifactId>
-      <version>1.0.0</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>pl.ds.websight</groupId>
       <artifactId>websight-assets-core-api</artifactId>
-      <version>1.0.0</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>dev.streamx</groupId>
-      <artifactId>streamx-connector-sling</artifactId>
-      <version>${streamx.connector.sling.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.metatype.annotations</artifactId>
-      <version>1.4.1</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.component.annotations</artifactId>
-      <version>1.4.0</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.framework</artifactId>
-      <version>1.9.0</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.jackrabbit</groupId>
       <artifactId>jackrabbit-jcr-commons</artifactId>
-      <version>2.20.4</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.sling</groupId>
       <artifactId>org.apache.sling.api</artifactId>
-      <version>2.24.0</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.sling</groupId>
       <artifactId>org.apache.sling.engine</artifactId>
-      <version>2.6.22</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.sling</groupId>
       <artifactId>org.apache.sling.servlet-helpers</artifactId>
-      <version>1.4.2</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.16.1</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.14.0</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.36</version>
-      <scope>provided</scope>
     </dependency>
 
   </dependencies>
