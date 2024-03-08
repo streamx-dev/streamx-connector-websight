@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import pl.ds.websight.publishing.framework.PublishException;
 
 @Component
-@Designate(ocd = PageDataHandlerConfig.class)
+@Designate(ocd = TemplateDataHandlerConfig.class)
 public class TemplateDataHandler implements PublicationHandler<TemplateModel> {
 
   private static final Logger LOG = LoggerFactory.getLogger(TemplateDataHandler.class);
@@ -39,7 +39,7 @@ public class TemplateDataHandler implements PublicationHandler<TemplateModel> {
 
   @Activate
   @Modified
-  private void activate(PageDataHandlerConfig config) {
+  private void activate(TemplateDataHandlerConfig config) {
     publicationChannel = config.publication_channel();
     enabled = config.enabled();
   }
