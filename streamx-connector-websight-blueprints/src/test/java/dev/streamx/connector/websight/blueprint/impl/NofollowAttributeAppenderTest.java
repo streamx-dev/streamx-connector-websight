@@ -24,11 +24,11 @@ class NofollowAttributeAppenderTest {
         .containsNoFollowLink("https://example.com/link-2")
         .containsNoFollowLink("https://other-example.com/link-1")
         .containsNoFollowLink("https://other-example.com/link-2")
-        .containsFollowLink("/internal/link");
+        .containsLinkWithoutRel("/internal/link");
   }
 
   @Test
-  void shouldAddNofollowToAnyLinks() throws IOException, AddNofollowAttributeException {
+  void shouldNotAddNofollowToAnyLinks() throws IOException, AddNofollowAttributeException {
     NofollowAttributeAppender appender = new NofollowAttributeAppender(false,
         Collections.emptySet());
     InputStream pageStream = Thread.currentThread().getContextClassLoader()
@@ -38,11 +38,11 @@ class NofollowAttributeAppenderTest {
     String appendedPage = appender.appendExternalLinks(page);
 
     HtmlDocumentAssert.assertThat(appendedPage)
-        .containsFollowLink("https://example.com/link-1")
-        .containsFollowLink("https://example.com/link-2")
-        .containsFollowLink("https://other-example.com/link-1")
-        .containsFollowLink("https://other-example.com/link-2")
-        .containsFollowLink("/internal/link");
+        .containsLinkWithoutRel("https://example.com/link-1")
+        .containsLinkWithoutRel("https://example.com/link-2")
+        .containsLinkWithoutRel("https://other-example.com/link-1")
+        .containsLinkWithoutRel("https://other-example.com/link-2")
+        .containsLinkWithoutRel("/internal/link");
   }
 
   @Test
@@ -58,8 +58,8 @@ class NofollowAttributeAppenderTest {
     HtmlDocumentAssert.assertThat(appendedPage)
         .containsNoFollowLink("https://example.com/link-1")
         .containsNoFollowLink("https://example.com/link-2")
-        .containsFollowLink("https://other-example.com/link-1")
-        .containsFollowLink("https://other-example.com/link-2");
+        .containsLinkWithoutRel("https://other-example.com/link-1")
+        .containsLinkWithoutRel("https://other-example.com/link-2");
   }
 
   @Test

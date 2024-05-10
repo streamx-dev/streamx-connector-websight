@@ -39,7 +39,7 @@ class HtmlDocumentAssert {
     return this;
   }
 
-  HtmlDocumentAssert containsFollowLink(String link) {
+  HtmlDocumentAssert containsLinkWithoutRel(String link) {
     List<String> rel = document.select("a[href=\"" + link +"\"]")
         .stream()
         .map(element -> element.attributes().get("rel"))
