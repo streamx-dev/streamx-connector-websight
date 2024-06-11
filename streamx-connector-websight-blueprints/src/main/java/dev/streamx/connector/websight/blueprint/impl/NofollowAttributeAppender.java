@@ -27,7 +27,8 @@ class NofollowAttributeAppender {
   String appendExternalLinks(String content) throws AddNofollowAttributeException {
     if (nofollowExternalLinks) {
       try {
-        Document document = Jsoup.parse(content);
+        String escapedContent = escapeSpecialHtmlCharacters(content);
+        Document document = Jsoup.parse(escapedContent);
         Elements links = document.select("a[href]");
         for (Element link : links) {
           String href = link.attr("href");
@@ -35,13 +36,21 @@ class NofollowAttributeAppender {
             link.attr("rel", "nofollow");
           }
         }
-        content = Entities.unescape(document.outerHtml());
+        content = unescapeSpecialHtmlCharacters(Entities.unescape(document.outerHtml()));
       } catch (Exception e) {
         LOG.error("Error during content sanitization", e);
         throw new AddNofollowAttributeException("Can't append content with nofollow attribute.");
       }
     }
     return content;
+  }
+
+  private String escapeSpecialHtmlCharacters(String content) {
+    return content.replaceAll("&([^;]+?);", "*&*$1;");
+  }
+
+  private String unescapeSpecialHtmlCharacters(String content) {
+    return content.replaceAll("\\*&\\*([^;]+?);", "&$1;");
   }
 
   private boolean isExternalLink(String href) {

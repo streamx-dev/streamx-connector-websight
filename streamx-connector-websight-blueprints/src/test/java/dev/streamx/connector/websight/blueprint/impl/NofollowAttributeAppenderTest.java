@@ -79,4 +79,18 @@ class NofollowAttributeAppenderTest {
         .containsText("{% endfor %}");
   }
 
+  @Test
+  void shouldNotBreakSpacialCharacters() throws IOException, AddNofollowAttributeException {
+    NofollowAttributeAppender appender = new NofollowAttributeAppender(true,
+        Collections.singleton("other-example.com"));
+    InputStream pageStream = Thread.currentThread().getContextClassLoader()
+        .getResourceAsStream("dev/streamx/connector/websight/blueprint/impl/pages/page.html");
+    String page = IOUtils.toString(pageStream, StandardCharsets.UTF_8);
+
+    String appendedPage = appender.appendExternalLinks(page);
+
+    HtmlDocumentAssert.assertThat(appendedPage)
+        .containsText("Special character &lt;");
+  }
+
 }
