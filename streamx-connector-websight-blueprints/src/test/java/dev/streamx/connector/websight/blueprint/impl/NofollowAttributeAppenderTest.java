@@ -24,7 +24,8 @@ class NofollowAttributeAppenderTest {
         .containsNoFollowLink("https://example.com/link-2")
         .containsNoFollowLink("https://other-example.com/link-1")
         .containsNoFollowLink("https://other-example.com/link-2")
-        .containsLinkWithoutRel("/internal/link");
+        .containsLinkWithoutRel("/internal/link")
+        .containsLinkWithoutRel("#anchorLink");
   }
 
   @Test
@@ -42,7 +43,8 @@ class NofollowAttributeAppenderTest {
         .containsLinkWithoutRel("https://example.com/link-2")
         .containsLinkWithoutRel("https://other-example.com/link-1")
         .containsLinkWithoutRel("https://other-example.com/link-2")
-        .containsLinkWithoutRel("/internal/link");
+        .containsLinkWithoutRel("/internal/link")
+        .containsLinkWithoutRel("#anchorLink");
   }
 
   @Test
