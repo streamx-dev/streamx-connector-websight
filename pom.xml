@@ -18,7 +18,7 @@
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <streamx.connector.sling.version>0.0.3</streamx.connector.sling.version>
+    <streamx.connector.sling.version>0.1.0</streamx.connector.sling.version>
     <!-- plugins -->
     <bnd.version>6.2.0</bnd.version>
     <sling.models.bnd.version>1.0.0</sling.models.bnd.version>
@@ -245,6 +245,13 @@
       </dependency>
 
       <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient-osgi</artifactId>
+        <version>4.5.14</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
         <version>2.15.3</version>
@@ -270,6 +277,34 @@
         <artifactId>slf4j-api</artifactId>
         <version>1.7.36</version>
         <scope>provided</scope>
+      </dependency>
+
+      <!-- Testing -->
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>3.25.3</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.10.2</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>1.7.36</version>
+        <scope>test</scope>
+      </dependency>
+
+      <!-- Sling testing -->
+      <dependency>
+        <groupId>org.apache.sling</groupId>
+        <artifactId>org.apache.sling.testing.sling-mock.junit5</artifactId>
+        <version>3.4.10</version>
+        <scope>test</scope>
       </dependency>
 
     </dependencies>
