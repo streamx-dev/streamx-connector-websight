@@ -54,7 +54,8 @@ class NofollowAttributeAppender {
   }
 
   private boolean isExternalLink(String href) {
-    return !StringUtils.startsWith(href, "/");
+    return !StringUtils.startsWith(href, "/")
+        && !StringUtils.startsWith(href, "#");
   }
 
   private boolean isNofollowAllowedForHost(String href) {
