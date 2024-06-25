@@ -46,11 +46,11 @@ class NofollowAttributeAppender {
   }
 
   private String escapeSpecialHtmlCharacters(String content) {
-    return content.replaceAll("&([^;&]+?);", "*&*$1;");
+    return content.replaceAll("&([^;&\s]+?);", "*&*$1;");
   }
 
   private String unescapeSpecialHtmlCharacters(String content) {
-    return content.replaceAll("\\*&\\*([^;&]+?);", "&$1;");
+    return content.replaceAll("\\*&\\*([^;&\s]+?);", "&$1;");
   }
 
   private boolean isExternalLink(String href) {
