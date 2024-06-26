@@ -4,7 +4,7 @@
 
   <groupId>dev.streamx</groupId>
   <artifactId>streamx-connector-websight-parent</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>WebSight StreamX Connector</name>
 
@@ -76,7 +76,7 @@
     <connection>scm:git:git@github.com:streamx-dev/streamx-connector-websight.git</connection>
     <developerConnection>scm:git:git@github.com:streamx-dev/streamx-connector-websight.git
     </developerConnection>
-    <tag>0.0.4</tag>
+    <tag>HEAD</tag>
     <url>https://github.com/streamx-dev/streamx-connector-websight</url>
   </scm>
 
