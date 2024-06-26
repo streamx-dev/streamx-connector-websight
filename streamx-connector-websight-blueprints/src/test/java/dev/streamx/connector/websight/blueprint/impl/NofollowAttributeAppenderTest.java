@@ -93,6 +93,10 @@ class NofollowAttributeAppenderTest {
 
     HtmlDocumentAssert.assertThat(appendedPage)
         .containsText("Special character &lt;");
+    HtmlDocumentAssert.assertThat(appendedPage)
+        .containsText("Special character with extra &&lt;");
+    HtmlDocumentAssert.assertThat(appendedPage)
+        .containsText("Longest Special character: &CounterClockwiseContourIntegral;");
   }
 
 }
