@@ -11,6 +11,7 @@ import org.slf4j.Marker;
 /**
  * The Filter class is responsible for cleaning up log messages related to a known internal Sling issue
  * involving the creation of an unclosed resource resolver.
+ * Unclosed RR is created <a href="https://github.com/apache/sling-org-apache-sling-scripting-core/commit/fa01f5d8740af82008bf2048cfea64d838a0a43a#diff-51cd8dd3f10aa864fb79e205cde1814ee5233e60b08c441c33aa9a597ba8691dR74">here</a>.
  */
 @Component(service = TurboFilter.class)
 public class UnclosedResourceResolverLogFilter extends TurboFilter {
