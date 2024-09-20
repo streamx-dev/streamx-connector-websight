@@ -2,7 +2,7 @@ package dev.streamx.connector.websight.blueprint.handler.content;
 
 import dev.streamx.connector.websight.blueprint.PageDataService;
 import dev.streamx.connector.websight.blueprint.ResourceResolverProvider;
-import dev.streamx.connector.websight.blueprint.model.PageModel;
+import dev.streamx.blueprints.data.Renderer;
 import dev.streamx.sling.connector.PublicationHandler;
 import dev.streamx.sling.connector.PublishData;
 import dev.streamx.sling.connector.UnpublishData;
@@ -22,11 +22,10 @@ import org.slf4j.LoggerFactory;
 import pl.ds.websight.publishing.framework.PublishException;
 
 @Component
-@Designate(ocd = PageDataHandlerConfig.class)
-public class PageDataHandler implements PublicationHandler<PageModel> {
+@Designate(ocd = RendererPublicationHandlerConfig.class)
+public class RendererPublicationHandler implements PublicationHandler<Renderer> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PageDataHandler.class);
-  private static final String PAGES_PATH_REGEXP = "^/published/[^/]+/pages/.*$";
+  private static final Logger LOG = LoggerFactory.getLogger(RendererPublicationHandler.class);
 
   @Reference
   private ResourceResolverProvider resourceResolverProvider;
@@ -39,30 +38,29 @@ public class PageDataHandler implements PublicationHandler<PageModel> {
 
   @Activate
   @Modified
-  private void activate(PageDataHandlerConfig config) {
+  private void activate(RendererPublicationHandlerConfig config) {
     publicationChannel = config.publication_channel();
     enabled = config.enabled();
   }
 
   @Override
   public String getId() {
-    return "WebSight-Pages-Handler";
+    return "WebSight-Renderer-Handler";
   }
 
   @Override
   public boolean canHandle(String resourcePath) {
-    return enabled && resourcePath.matches(PAGES_PATH_REGEXP) && pageDataService.isPage(
-        resourcePath);
+    return enabled && pageDataService.isPageTemplate(resourcePath);
   }
 
   @Override
-  public PublishData<PageModel> getPublishData(String resourcePath) {
+  public PublishData<Renderer> getPublishData(String resourcePath) {
     try (ResourceResolver resourceResolver = resourceResolverProvider.getResourceResolver()) {
       Resource resource = resourceResolver.getResource(resourcePath);
       if (resource != null) {
-        PageModel page = resolveData(resource);
-        return new PublishData<>(getStoragePath(resourcePath), publicationChannel, PageModel.class,
-            page);
+        Renderer renderer = resolveData(resource);
+        return new PublishData<>(getStoragePath(resourcePath), publicationChannel,
+            Renderer.class, renderer);
       } else {
         LOG.info("Cannot prepare publish data for {}. Resource doesn't exist.", resourcePath);
       }
@@ -75,13 +73,14 @@ public class PageDataHandler implements PublicationHandler<PageModel> {
   }
 
   @Override
-  public UnpublishData<PageModel> getUnpublishData(String resourcePath) {
-    return new UnpublishData<>(getStoragePath(resourcePath), publicationChannel, PageModel.class);
+  public UnpublishData<Renderer> getUnpublishData(String resourcePath) {
+    return new UnpublishData<>(getStoragePath(resourcePath), publicationChannel,
+        Renderer.class);
   }
 
-  private PageModel resolveData(Resource resource) throws PublishException {
+  private Renderer resolveData(Resource resource) throws PublishException {
     try (InputStream dataStream = getStorageData(resource)) {
-      return new PageModel(ByteBuffer.wrap(dataStream.readAllBytes()));
+      return new Renderer(ByteBuffer.wrap(dataStream.readAllBytes()));
     } catch (IOException e) {
       LOG.warn("IOException occurred when storing data for resource {}", resource.getPath());
       throw new PublishException(String.format("Cannot read resource %s data", resource.getPath()),

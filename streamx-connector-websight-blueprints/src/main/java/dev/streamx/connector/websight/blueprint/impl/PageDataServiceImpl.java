@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 public class PageDataServiceImpl implements PageDataService {
 
   private static final Logger LOG = LoggerFactory.getLogger(PageDataServiceImpl.class);
+  private static final String PAGES_PATH_REGEXP = "^/published/[^/]+/pages/.*$";
 
   @Reference
   private SlingRequestProcessor requestProcessor;
@@ -54,12 +55,20 @@ public class PageDataServiceImpl implements PageDataService {
 
   @Override
   public boolean isPage(String resourcePath) {
-    return !isPageTemplate(resourcePath);
+    return isMatchingPagesPathPattern(resourcePath) && !isMatchingPageTemplatePattern(resourcePath);
   }
 
   @Override
   public boolean isPageTemplate(String resourcePath) {
+    return isMatchingPagesPathPattern(resourcePath) && isMatchingPageTemplatePattern(resourcePath);
+  }
+
+  private boolean isMatchingPageTemplatePattern(String resourcePath) {
     return resourcePath.matches(templatesPathPattern);
+  }
+
+  private boolean isMatchingPagesPathPattern(String resourcePath) {
+    return resourcePath.matches(PAGES_PATH_REGEXP);
   }
 
   private InputStream wrapStreamIfNeeded(boolean shortenPaths, String path, InputStream input) {
