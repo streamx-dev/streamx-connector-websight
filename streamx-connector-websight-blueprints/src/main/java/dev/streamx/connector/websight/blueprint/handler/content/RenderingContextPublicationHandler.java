@@ -7,8 +7,6 @@ import dev.streamx.connector.websight.blueprint.ResourceResolverProvider;
 import dev.streamx.sling.connector.PublicationHandler;
 import dev.streamx.sling.connector.PublishData;
 import dev.streamx.sling.connector.UnpublishData;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.LoginException;
@@ -64,8 +62,8 @@ public class RenderingContextPublicationHandler implements PublicationHandler<Re
       if (resource != null) {
         RenderingContext renderer = resolveData(resource);
         if (renderer != null) {
-          return new PublishData<>(resourcePath, publicationChannel, RenderingContext.class,
-              renderer);
+          return new PublishData<>(getKeyForTemplateResource(resource), publicationChannel,
+              RenderingContext.class, renderer);
         }
       } else {
         LOG.info("Cannot prepare publish data for {}. Resource doesn't exist.", resourcePath);
@@ -92,13 +90,17 @@ public class RenderingContextPublicationHandler implements PublicationHandler<Re
     String outputKeyTemplate = properties.get("outputKeyTemplate", String.class);
     if (StringUtils.isNoneBlank(dataKeyMatchPattern, outputKeyTemplate)) {
       // Use same key as is used for the Renderer published for the template page.
-      String rendererKey = resource.getPath() + ".html";
+      String rendererKey = getKeyForTemplateResource(resource);
       return new RenderingContext(rendererKey, dataKeyMatchPattern, outputKeyTemplate,
           OutputType.PAGE);
     }
     LOG.info("Cannot prepare publish data for {}. Resource doesn't contain required properties.",
         resource.getPath());
     return null;
+  }
+
+  private String getKeyForTemplateResource(Resource resource) {
+    return resource.getPath() + ".html";
   }
 
 }
