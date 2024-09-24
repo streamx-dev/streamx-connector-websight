@@ -18,10 +18,11 @@ This bundle provides publication handlers for the StreamX Blueprints.
 Each handler contains the configuration allows to change publication channel and disable it.
 See:
 
-- [ApplicationResourceDataConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/application/ApplicationResourceDataConfig.java)
-- [AssetDataHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/AssetDataHandlerConfig.java)
-- [PageDataHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/PageDataHandlerConfig.java)
-- [TemplateDataHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/TemplateDataHandlerConfig.java)
+- [WebResourcePublicationHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/application/WebResourcePublicationHandlerConfig.java)
+- [AssetPublicationHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/AssetPublicationHandlerConfig.java)
+- [PagePublicationHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/PagePublicationHandlerConfig.java)
+- [RendererPublicationHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/RendererPublicationHandlerConfig.java)
+- [RenderingContextPublicationHandlerConfig](./streamx-connector-websight-blueprints/src/main/java/dev/streamx/connector/websight/blueprint/handler/content/RenderingContextPublicationHandlerConfig.java)
 
 ## Build
 
@@ -66,7 +67,7 @@ Example:
       "start-order":"20"
     },
     {
-      "id":"com.fasterxml.jackson.core:jackson-core:2.15.3",
+      "id":"com.fasterxml.jackson.core:jackson-core:2.16.1",
       "start-order":"20"
     },
     {

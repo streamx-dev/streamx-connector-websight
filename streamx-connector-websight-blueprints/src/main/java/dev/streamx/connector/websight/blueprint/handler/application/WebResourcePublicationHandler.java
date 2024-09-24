@@ -1,7 +1,7 @@
 package dev.streamx.connector.websight.blueprint.handler.application;
 
 import dev.streamx.connector.websight.blueprint.ResourceResolverProvider;
-import dev.streamx.connector.websight.blueprint.model.WebResourceModel;
+import dev.streamx.blueprints.data.WebResource;
 import dev.streamx.sling.connector.PublicationHandler;
 import dev.streamx.sling.connector.PublishData;
 import dev.streamx.sling.connector.UnpublishData;
@@ -22,10 +22,10 @@ import org.slf4j.LoggerFactory;
 import pl.ds.websight.publishing.framework.PublishException;
 
 @Component
-@Designate(ocd = ApplicationResourceDataConfig.class)
-public class ApplicationResourceDataHandler implements PublicationHandler<WebResourceModel> {
+@Designate(ocd = WebResourcePublicationHandlerConfig.class)
+public class WebResourcePublicationHandler implements PublicationHandler<WebResource> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ApplicationResourceDataHandler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(WebResourcePublicationHandler.class);
 
   private String publicationChannel;
   private boolean enabled;
@@ -35,14 +35,14 @@ public class ApplicationResourceDataHandler implements PublicationHandler<WebRes
 
   @Activate
   @Modified
-  private void activate(ApplicationResourceDataConfig config) {
+  private void activate(WebResourcePublicationHandlerConfig config) {
     publicationChannel = config.publication_channel();
     enabled = config.enabled();
   }
 
   @Override
   public String getId() {
-    return "WebSight-Application-Resources-Handler";
+    return "WebSight-WebResource-Handler";
   }
 
   @Override
@@ -60,12 +60,12 @@ public class ApplicationResourceDataHandler implements PublicationHandler<WebRes
   }
 
   @Override
-  public PublishData<WebResourceModel> getPublishData(String resourcePath) {
+  public PublishData<WebResource> getPublishData(String resourcePath) {
     try (ResourceResolver resourceResolver = resourceResolverProvider.getResourceResolver()) {
       Resource resource = resourceResolver.getResource(resourcePath);
       if (resource != null) {
-        WebResourceModel data = resolveData(resource);
-        return new PublishData<>(resourcePath, publicationChannel, WebResourceModel.class, data);
+        WebResource data = resolveData(resource);
+        return new PublishData<>(resourcePath, publicationChannel, WebResource.class, data);
       } else {
         LOG.warn("Cannot prepare publish data for {}. Resource doesn't exist.", resourcePath);
       }
@@ -78,14 +78,14 @@ public class ApplicationResourceDataHandler implements PublicationHandler<WebRes
   }
 
   @Override
-  public UnpublishData<WebResourceModel> getUnpublishData(String resourcePath) {
-    return new UnpublishData<>(resourcePath, publicationChannel, WebResourceModel.class);
+  public UnpublishData<WebResource> getUnpublishData(String resourcePath) {
+    return new UnpublishData<>(resourcePath, publicationChannel, WebResource.class);
   }
 
-  public WebResourceModel resolveData(Resource resource) throws PublishException {
+  public WebResource resolveData(Resource resource) throws PublishException {
     try (InputStream inputStream = resource.adaptTo(InputStream.class)) {
       if (inputStream != null) {
-        return new WebResourceModel(ByteBuffer.wrap(inputStream.readAllBytes()));
+        return new WebResource(ByteBuffer.wrap(inputStream.readAllBytes()));
       }
     } catch (IOException e) {
       LOG.warn("IOException occurred when storing data for resource {}", resource.getPath());

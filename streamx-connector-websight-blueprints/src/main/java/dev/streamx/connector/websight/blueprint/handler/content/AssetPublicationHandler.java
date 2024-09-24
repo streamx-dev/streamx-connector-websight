@@ -1,7 +1,7 @@
 package dev.streamx.connector.websight.blueprint.handler.content;
 
 import dev.streamx.connector.websight.blueprint.ResourceResolverProvider;
-import dev.streamx.connector.websight.blueprint.model.AssetModel;
+import dev.streamx.blueprints.data.Asset;
 import dev.streamx.sling.connector.PublicationHandler;
 import dev.streamx.sling.connector.PublishData;
 import dev.streamx.sling.connector.UnpublishData;
@@ -21,15 +21,14 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.ds.websight.assets.core.api.Asset;
 import pl.ds.websight.assets.core.api.Rendition;
 import pl.ds.websight.publishing.framework.PublishException;
 
 @Component
-@Designate(ocd = AssetDataHandlerConfig.class)
-public class AssetDataHandler implements PublicationHandler<AssetModel> {
+@Designate(ocd = AssetPublicationHandlerConfig.class)
+public class AssetPublicationHandler implements PublicationHandler<Asset> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(AssetDataHandler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AssetPublicationHandler.class);
   private static final String ASSETS_PATH_REGEXP = "^/published/[^/]+/assets/.*$";
 
   @Reference
@@ -40,14 +39,14 @@ public class AssetDataHandler implements PublicationHandler<AssetModel> {
 
   @Activate
   @Modified
-  private void activate(AssetDataHandlerConfig config) {
+  private void activate(AssetPublicationHandlerConfig config) {
     publicationChannel = config.publication_channel();
     enabled = config.enabled();
   }
 
   @Override
   public String getId() {
-    return "WebSight-Assets-Handler";
+    return "WebSight-Asset-Handler";
   }
 
   @Override
@@ -56,12 +55,12 @@ public class AssetDataHandler implements PublicationHandler<AssetModel> {
   }
 
   @Override
-  public PublishData<AssetModel> getPublishData(String resourcePath) {
+  public PublishData<Asset> getPublishData(String resourcePath) {
     try (ResourceResolver resourceResolver = resourceResolverProvider.getResourceResolver()) {
       Resource resource = resourceResolver.getResource(resourcePath);
       if (resource != null) {
-        AssetModel asset = resolveData(resource);
-        return new PublishData<>(getStoragePath(resourcePath), publicationChannel, AssetModel.class,
+        Asset asset = resolveData(resource);
+        return new PublishData<>(getStoragePath(resourcePath), publicationChannel, Asset.class,
             asset);
       } else {
         LOG.info("Cannot prepare publish data for {}. Resource doesn't exist.", resourcePath);
@@ -75,23 +74,18 @@ public class AssetDataHandler implements PublicationHandler<AssetModel> {
   }
 
   @Override
-  public UnpublishData<AssetModel> getUnpublishData(String resourcePath) {
-    return new UnpublishData<>(getStoragePath(resourcePath), publicationChannel, AssetModel.class);
+  public UnpublishData<Asset> getUnpublishData(String resourcePath) {
+    return new UnpublishData<>(getStoragePath(resourcePath), publicationChannel, Asset.class);
   }
 
   private String getStoragePath(String resourcePath) {
     String extension = getAssetExtension(resourcePath);
-    return encodeResourcePath(resourcePath + "/jcr:content/renditions/original" + extension);
+    return resourcePath + "/jcr:content/renditions/original" + extension;
   }
 
-  private String encodeResourcePath(String resourcePath) {
-    List<String> segments = URLEncodedUtils.parsePathSegments(resourcePath);
-    return URLEncodedUtils.formatSegments(segments.toArray(new String[]{}));
-  }
-
-  private AssetModel resolveData(Resource publishedResource) throws PublishException {
+  private Asset resolveData(Resource publishedResource) throws PublishException {
     try (InputStream dataStream = getStorageData(publishedResource)) {
-      return new AssetModel(ByteBuffer.wrap(dataStream.readAllBytes()));
+      return new Asset(ByteBuffer.wrap(dataStream.readAllBytes()));
     } catch (IOException e) {
       throw new PublishException(
           String.format("Cannot read resource %s data", publishedResource.getPath()), e);
@@ -105,7 +99,8 @@ public class AssetDataHandler implements PublicationHandler<AssetModel> {
   }
 
   private Optional<Rendition> getOriginalRendition(Resource resource) {
-    return Optional.ofNullable(resource.adaptTo(Asset.class)).map(Asset::getOriginalRendition);
+    return Optional.ofNullable(resource.adaptTo(pl.ds.websight.assets.core.api.Asset.class)).map(
+        pl.ds.websight.assets.core.api.Asset::getOriginalRendition);
   }
 
   private String getAssetExtension(String resourcePath) {
