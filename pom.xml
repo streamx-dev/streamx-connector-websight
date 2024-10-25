@@ -20,7 +20,7 @@
 
     <streamx.connector.sling.version>0.2.2</streamx.connector.sling.version>
     <!-- plugins -->
-    <bnd.version>6.2.0</bnd.version>
+    <bnd.version>7.0.0</bnd.version>
     <sling.models.bnd.version>1.0.0</sling.models.bnd.version>
     <sling.scriptbundle.version>0.5.2</sling.scriptbundle.version>
   </properties>
